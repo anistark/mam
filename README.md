@@ -1,4 +1,4 @@
-# NODE.JS MAM implementation
+# ⭐️ NODE.JS MAM implementation ⭐️
 
 IOTA Node JS Client implementation of MAM (Masked Authentication Messaging)
 
