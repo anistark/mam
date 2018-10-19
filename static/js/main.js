@@ -4,10 +4,10 @@ $('#push-data').click(function() {
     $.ajax({
         url: "/mam/push",
         method: 'POST',
-        data: {
+        data: JSON.stringify({
             'data': $('#comment').val(),
             'seed': $('#seed').val()
-        },
+        }),
         // xhr: function() {
         //     console.log('in xhr');
         // },
