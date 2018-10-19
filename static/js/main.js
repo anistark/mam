@@ -1,13 +1,12 @@
 $('#push-data').click(function() {
     console.log('-- pushing to mam clicked --');
-    console.log('data:', $('#comment').val());
     $.ajax({
         url: "/mam/push",
         method: 'POST',
-        data: JSON.stringify({
+        data: {
             'data': $('#comment').val(),
             'seed': $('#seed').val()
-        }),
+        },
         // xhr: function() {
         //     console.log('in xhr');
         // },
@@ -26,9 +25,9 @@ $('#fetch-data').click(function() {
     $.ajax({
         url: "/mam/fetch",
         method: 'POST',
-        data: JSON.stringify({
+        data: {
             'root': $('#rootHash').val()
-        }),
+        },
         // xhr: function() {
         //     console.log('in xhr');
         //     // return new($('#my_api_iframe')[0].contentWindow.XMLHttpRequest)();
