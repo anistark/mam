@@ -1,0 +1,29 @@
+{
+  "name": "mam",
+  "version": "1.0.0",
+  "description": "IOTA Node JS Client implementation of MAM (Masked Authentication Messaging)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anistark/mam.git"
+  },
+  "keywords": [
+    "anistark",
+    "mam",
+    "iota",
+    "nodejs"
+  ],
+  "author": "Kumar Anirudha <anirudhastark@yahoo.com> (http://anirudha.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anistark/mam/issues"
+  },
+  "homepage": "https://github.com/anistark/mam#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "@iota/converter": "^1.0.0-beta.5"
+  }
+}
