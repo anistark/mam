@@ -1,6 +1,5 @@
 const Mam = require('./lib/mam.client.js')
 const Converter = require('@iota/converter')
-// const { asciiToTrytes, trytesToAscii } = require('@iota/converter')
 
 let node = 'https://nodes.iota.fm:443/'
 
@@ -11,24 +10,18 @@ module.exports = {
     mamPublish: async function(requestData, responseObject) {
         let mode = 'public'
         console.log('requestData:', requestData);
-
         let mamState = Mam.init(node, requestData.seed, 2)
         // console.log('mamState:', mamState);
-
-        // Create MAM Payload - STRING OF TRYTES
         const trytes = Converter.asciiToTrytes(JSON.stringify(requestData.data))
         // console.log('trytes:', trytes);
         const message = Mam.create(mamState, trytes)
         // console.log('message:', message);
-        // Save new mamState
         mamState = message.state
         // console.log('mamState:', mamState);
         // Attach the payload.
         const resp = await Mam.attach(message.payload, message.address)
-
         // console.log('resp:', resp);
 
-        // Fetch Stream Async to Test
         const fetchResp = await Mam.fetch(message.root, 'public', null, logData)
         console.log('fetchResp:', fetchResp);
 
