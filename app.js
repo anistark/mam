@@ -25,7 +25,8 @@ router.get("/", function(req, res) {
 });
 
 router.post("/mam/push", function(req, res) {
-    helper.mamPublish(req.body, function (mamResponseData) {
+    helper.mamPublish(req.body, function (err, mamResponseData) {
+        if(err) res.status(400).json(err);
         console.log('mamResponseData:', mamResponseData);
         res.status(200).json(mamResponseData);
     });
@@ -33,7 +34,8 @@ router.post("/mam/push", function(req, res) {
 });
 
 router.post("/mam/fetch", function(req, res) {
-    helper.mamFetch(req.body, function (mamResponseData) {
+    helper.mamFetch(req.body, function (err, mamResponseData) {
+        if(err) res.status(400).json(err);
         console.log('mamResponseData:', mamResponseData);
         res.status(200).json(mamResponseData)
     });
