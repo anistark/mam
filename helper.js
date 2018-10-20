@@ -4,7 +4,7 @@ const Converter = require('@iota/converter')
 let node = 'https://nodes.iota.fm:443/'
 
 // Mam.init(provider, seed, security)
-var mamState = Mam.init(node)
+// var mamState = Mam.init(node)
 
 const logData = data => console.log('log data: -> ', JSON.parse(Converter.trytesToAscii(data)))
 
@@ -13,10 +13,11 @@ module.exports = {
     mamPublish: async function(requestData, responseObject) {
         let mode = 'public'
         console.log('requestData:', requestData);
-        console.log('mamState 1:', mamState);
+        // console.log('mamState 1:', mamState);
         try {
-            mamState = Mam.changeMode(mamState, mode, requestData.seed)
-            console.log('mamState 2:', mamState);
+            var mamState = Mam.init(node, requestData.seed, 2)
+            // mamState = Mam.changeMode(mamState, mode, requestData.seed)
+            // console.log('mamState 2:', mamState);
             const trytes = Converter.asciiToTrytes(JSON.stringify(requestData.data))
             // console.log('trytes:', trytes);
             const message = Mam.create(mamState, trytes)
