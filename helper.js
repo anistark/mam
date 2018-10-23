@@ -1,5 +1,6 @@
 const Mam = require('./lib/mam.client.js')
 const Converter = require('@iota/converter')
+var bluebird = require('bluebird')
 
 let node = 'https://nodes.iota.fm:443/'
 
@@ -19,7 +20,7 @@ module.exports = {
             // mamState = Mam.changeMode(mamState, mode, requestData.seed)
             // console.log('mamState 2:', mamState);
             const trytes = Converter.asciiToTrytes(JSON.stringify(requestData.data))
-            // console.log('trytes:', trytes);
+            console.log('trytes:', trytes);
             const message = Mam.create(mamState, trytes)
             // console.log('message:', message);
             mamState = message.state
@@ -28,8 +29,8 @@ module.exports = {
             const resp = await Mam.attach(message.payload, message.address)
             // console.log('resp:', resp);
 
-            const fetchResp = await Mam.fetch(message.root, 'public', null, logData)
-            console.log('fetchResp:', fetchResp);
+            // const fetchResp = await Mam.fetch(message.root, 'public', null, logData)
+            // console.log('fetchResp:', fetchResp);
 
             responseObject(null, message.root)
         } catch (e) {
@@ -44,9 +45,19 @@ module.exports = {
             console.log('requestData:', requestData);
             let mode = 'public'
             let key = null
-            const resp = await Mam.fetch(requestData.root, mode, key, data => console.log('data:', Converter.trytesToAscii(data)))
-            console.log('resp:', resp)
-            responseObject(null, resp)
+            let tempData;
+            // const resp = await Mam.fetch(requestData.root, mode, key, data => console.log('data:', Converter.trytesToAscii(data)))
+            // console.log('resp:', resp)
+            let allMamData = []
+
+            const fetchResp = await Mam.fetch(requestData.root, 'public', null, data => {
+                tempData = JSON.parse(Converter.trytesToAscii(data))
+                console.log('log data: =->', tempData)
+                allMamData.push(tempData)
+            })
+            console.log('fetchResp:', fetchResp);
+
+            responseObject(null, fetchResp)
         } catch (e) {
             console.log('mamFetch error:', e);
             responseObject(e)
