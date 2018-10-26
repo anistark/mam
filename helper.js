@@ -1,6 +1,6 @@
 const Mam = require('./lib/mam.client.js')
 const Converter = require('@iota/converter')
-var bluebird = require('bluebird')
+// var bluebird = require('bluebird')
 
 let node = 'https://nodes.iota.fm:443/'
 
@@ -41,8 +41,8 @@ module.exports = {
 
     mamFetch: async function(requestData, responseObject) {
         try {
-            Mam.init(node)
-            console.log('requestData:', requestData);
+            // console.log('requestData:', requestData);
+            Mam.init(node, requestData.seed, 2)
             let mode = 'public'
             let key = null
             let tempData;

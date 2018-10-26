@@ -26,7 +26,8 @@ $('#fetch-data').click(function() {
         url: "/mam/fetch",
         method: 'POST',
         data: {
-            'root': $('#rootHash').val()
+            'root': $('#rootHash').val(),
+            'seed': $('#fetch-seed').val()
         },
         // xhr: function() {
         //     console.log('in xhr');
