@@ -16,7 +16,7 @@ module.exports = {
         console.log('requestData:', requestData);
         // console.log('mamState 1:', mamState);
         try {
-            var mamState = Mam.init(node, requestData.seed, 2)
+            var mamState = Mam.init(node, requestData.seed)
             // mamState = Mam.changeMode(mamState, mode, requestData.seed)
             // console.log('mamState 2:', mamState);
             const trytes = Converter.asciiToTrytes(JSON.stringify(requestData.data))
@@ -42,25 +42,41 @@ module.exports = {
     mamFetch: async function(requestData, responseObject) {
         try {
             // console.log('requestData:', requestData);
-            Mam.init(node, requestData.seed, 2)
+            Mam.init(node, requestData.seed)
             let mode = 'public'
             let key = null
-            let tempData;
             // const resp = await Mam.fetch(requestData.root, mode, key, data => console.log('data:', Converter.trytesToAscii(data)))
             // console.log('resp:', resp)
             let allMamData = []
-
-            const fetchResp = await Mam.fetch(requestData.root, 'public', null, data => {
-                tempData = JSON.parse(Converter.trytesToAscii(data))
+            if('allMamData' in Object.keys(requestData)) {
+                allMamData = requestData.allMamData
+            }
+            // while (true) {
+            let currentRoot = requestData.root;
+            console.log('currentRoot:', currentRoot);
+            const fetchResp = await Mam.fetch(currentRoot, 'public', null, data => {
+                let tempData = JSON.parse(Converter.trytesToAscii(data))
                 console.log('log data: =->', tempData)
                 allMamData.push(tempData)
             })
-            console.log('fetchResp:', fetchResp);
-
-            responseObject(null, fetchResp)
+            if(fetchResp === undefined) {
+                responseObject(null, {fetchResp: fetchResp, 'allMamData': allMamData})
+            }
+            else {
+                console.log('fetchResp:', fetchResp);
+                if(currentRoot != fetchResp.nextRoot) {
+                    currentRoot = fetchResp.nextRoot
+                    return mamFetch({'allMamData': allMamData, 'root': currentRoot})
+                }
+                else {
+                    responseObject(null, {fetchResp: fetchResp, 'allMamData': allMamData})
+                }
+            }
+            // }
         } catch (e) {
             console.log('mamFetch error:', e);
             responseObject(e)
         }
     }
+
 };

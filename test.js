@@ -21,7 +21,7 @@ fetchData(requestData, function repeat(result) {
     console.log('output:', output);
     if (result.winner) {
         // console.log('repeat:', repeat);
-        requestData['nextRoot']= 'anythingelse'
+        requestData['nextRoot']= 'empty'
         fetchData(requestData, repeat);
     }
     else {
@@ -37,6 +37,7 @@ async function fetchData(requestData, callback) {
         tempData = JSON.parse(Converter.trytesToAscii(data))
         // console.log('log data: =->', tempData)
         allMamData.push(tempData)
+        console.log('allMamData:', allMamData);
         let winner = results.shift()
         console.log('winner:', winner);
         callback({winner: winner});

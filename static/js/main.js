@@ -12,6 +12,7 @@ $('#push-data').click(function() {
         // },
         success: function(responseData) {
             console.log('responseData:', responseData);
+            $('#root-hash').html('Root: '+responseData)
         },
         error: function (errorData) {
             console.log('errorData:', errorData);
