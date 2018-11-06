@@ -1,46 +1,37 @@
 const Mam = require('./lib/mam.client.js')
-const Converter = require('@iota/converter')
+const { asciiToTrytes, trytesToAscii } = require('@iota/converter')
 
-let node = 'https://nodes.iota.fm:443/'
+// Initialise MAM State - PUBLIC
+// let mamState = Mam.init('https://nodes.iota.fm:443/', 'MVGNOJGFTIOEUHYOGQITCJWUKYXSWMYXHCPREXJTKVPTZAIYDFPCJTSJFYYKTHBABJSACNFWNQWKTGPNW')
 
-Mam.init(node, 'TUULMYMFZUFKWBKXUHWVDZHADXLTFQAGYOLERFFPTMRNVBYTQWMQPZIURAZHIGZSUVQVLHPFSLF9DOKLQ', 2);
+    let mamState = {
+        subscribed: [],
+        channel: {
+            side_key: null,
+            mode: 'public',
+            next_root: 'NOEABVJAHDPEYFCUTWNHAKWJAQF9SFFGOKQDLUUEJJXERFMYUWJODNQHHARWFLALFRJTMFDKEQEFOPQMJ',
+            security: 2,
+            start: 3,
+     count: 1,
+     next_count: 1,
+     index: 0 },
+  seed: 'MVGNOJGFTIOEUHYOGQITCJWUKYXSWMYXHCPREXJTKVPTZAIYDFPCJTSJFYYKTHBABJSACNFWNQWKTGPNW' }
 
-var output;
-var results = [true, false];
+// Publish to tangle
+const publish = async packet => {
+    // Create MAM Payload - STRING OF TRYTES
+    const trytes = asciiToTrytes(JSON.stringify(packet))
+    const message = Mam.create(mamState, trytes)
+    console.log('message root:', message.root);
+    // Save new mamState
+    mamState = message.state
+    console.log('mamState:', mamState);
+    // Attach the payload.
+    const resp = await Mam.attach(message.payload, message.address)
 
-var requestData = {
-    'root': 'HSQQMDSIKFLUIHAIOKO9CYRYPGASGETJFIYOTOBHQBVRWZYXERQSTUIISLHZFHFOTJXVQTV9UWYPEWDXH',
-    'nextRoot': 'anything'
+    // console.log('resp :', resp);
 }
 
-var allMamData = []
-
-fetchData(requestData, function repeat(result) {
-    console.log('result:', result);
-    output += result.winner;
-    console.log('output:', output);
-    if (result.winner) {
-        // console.log('repeat:', repeat);
-        requestData['nextRoot']= 'empty'
-        fetchData(requestData, repeat);
-    }
-    else {
-        console.log('-- done --');
-        console.log('\n\nallMamData:', allMamData);
-    }
-});
-
-async function fetchData(requestData, callback) {
-    // call fetch api with root
-    console.log('requestData:', requestData, '\n\n');
-    var fetchResp = await Mam.fetch(requestData.root, 'public', null, data => {
-        tempData = JSON.parse(Converter.trytesToAscii(data))
-        // console.log('log data: =->', tempData)
-        allMamData.push(tempData)
-        console.log('allMamData:', allMamData);
-        let winner = results.shift()
-        console.log('winner:', winner);
-        callback({winner: winner});
-    })
-    console.log('fetchResp:', fetchResp);
-}
+publish('POTATO FOUR')
+publish('POTATO FIVE')
+publish('POTATO SIX')
